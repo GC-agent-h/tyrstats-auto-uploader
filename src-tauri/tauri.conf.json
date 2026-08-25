@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Tyr Auto Uploader",
+  "productName": "Tyrstats - AutoUploader",
   "version": "0.1.0",
   "identifier": "com.tyrautouploader.app",
   "build": {
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "Tyr Auto Uploader",
+        "title": "Tyrstats - AutoUploader",
         "width": 1080,
         "height": 700,
         "minWidth": 860,
