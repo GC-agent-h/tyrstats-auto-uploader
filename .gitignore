@@ -1,0 +1,53 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules/
+
+# Lockfiles — install from package.json / Cargo.toml
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lock
+bun.lockb
+Cargo.lock
+**/Cargo.lock
+
+# Frontend build
+dist/
+dist-ssr/
+
+# Rust / Tauri build
+**/target/
+src-tauri/gen/
+src-tauri/WixTools/
+
+# Extra icons produced by `tauri icon` (mobile / Store). Desktop icons stay tracked.
+src-tauri/icons/android/
+src-tauri/icons/ios/
+src-tauri/icons/Square*.png
+src-tauri/icons/StoreLogo.png
+
+# Env (never commit secrets; .env.example is the template)
+.env
+.env.*
+!.env.example
+*.local
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+Thumbs.db
