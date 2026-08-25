@@ -13,8 +13,10 @@
     "windows": [
       {
         "title": "Tyr Auto Uploader",
-        "width": 800,
-        "height": 600
+        "width": 880,
+        "height": 720,
+        "minWidth": 640,
+        "minHeight": 560
       }
     ],
     "security": {

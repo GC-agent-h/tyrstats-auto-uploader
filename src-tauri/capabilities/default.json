@@ -5,6 +5,31 @@
   "windows": ["main"],
   "permissions": [
     "core:default",
-    "opener:default"
+    "opener:default",
+    "fs:allow-read-dir",
+    "fs:allow-read-file",
+    "fs:allow-read-text-file",
+    "fs:allow-write-text-file",
+    "fs:allow-stat",
+    "fs:allow-exists",
+    "fs:allow-mkdir",
+    "fs:allow-open",
+    {
+      "identifier": "fs:scope",
+      "allow": [
+        { "path": "$LOCALDATA/Tyr/Saved/Demos" },
+        { "path": "$LOCALDATA/Tyr/Saved/Demos/**" },
+        { "path": "$APPLOCALDATA" },
+        { "path": "$APPLOCALDATA/**" }
+      ]
+    },
+    {
+      "identifier": "http:default",
+      "allow": [
+        { "url": "http://localhost:3000/**" },
+        { "url": "http://127.0.0.1:3000/**" },
+        { "url": "https://**" }
+      ]
+    }
   ]
 }
