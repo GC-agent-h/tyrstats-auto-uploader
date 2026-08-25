@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 
 import { AuthScreen } from "./components/AuthScreen";
-import { HomeScreen } from "./components/HomeScreen";
+import { FolderPanel } from "./components/FolderPanel";
 import { hasSupabaseConfig } from "./lib/config";
 import { supabase } from "./lib/supabase";
 import "./App.css";
@@ -29,9 +29,9 @@ function App() {
     return () => data.subscription.unsubscribe();
   }, []);
 
-  return (
-    <main className="app-shell">
-      {!hasSupabaseConfig() ? (
+  if (!hasSupabaseConfig()) {
+    return (
+      <main className="app-shell">
         <section className="card">
           <h1>Missing configuration</h1>
           <p className="lede">
@@ -40,15 +40,26 @@ function App() {
             service role key.
           </p>
         </section>
-      ) : !ready ? (
+      </main>
+    );
+  }
+
+  if (!ready) {
+    return (
+      <main className="app-shell">
         <section className="card">
           <p className="lede">Loading…</p>
         </section>
-      ) : session?.user.email ? (
-        <HomeScreen email={session.user.email} />
-      ) : (
-        <AuthScreen />
-      )}
+      </main>
+    );
+  }
+
+  const email = session?.user.email ?? null;
+
+  return (
+    <main className="app-shell split">
+      <AuthScreen email={email} />
+      <FolderPanel signedIn={Boolean(email)} />
     </main>
   );
 }

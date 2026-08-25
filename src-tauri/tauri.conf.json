@@ -13,9 +13,9 @@
     "windows": [
       {
         "title": "Tyr Auto Uploader",
-        "width": 880,
-        "height": 720,
-        "minWidth": 640,
+        "width": 1080,
+        "height": 700,
+        "minWidth": 860,
         "minHeight": 560
       }
     ],

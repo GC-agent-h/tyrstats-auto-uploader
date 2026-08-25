@@ -4,9 +4,13 @@ import { siteUrl } from "../lib/config";
 import { openWebsitePath } from "../lib/openWebsite";
 import { supabase } from "../lib/supabase";
 
-export function AuthScreen() {
+type Props = {
+  email: string | null;
+};
+
+export function AuthScreen({ email }: Props) {
   const [mode, setMode] = useState<"sign-in" | "sign-up">("sign-in");
-  const [email, setEmail] = useState("");
+  const [emailValue, setEmailValue] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -24,13 +28,16 @@ export function AuthScreen() {
 
     const result = signUp
       ? await supabase.auth.signUp({
-          email,
+          email: emailValue,
           password,
           options: {
             emailRedirectTo: `${siteUrl}/upload`,
           },
         })
-      : await supabase.auth.signInWithPassword({ email, password });
+      : await supabase.auth.signInWithPassword({
+          email: emailValue,
+          password,
+        });
 
     setSubmitting(false);
 
@@ -45,69 +52,93 @@ export function AuthScreen() {
   }
 
   return (
-    <section className="card">
-      <h1>{signUp ? "Create your account" : "Sign in"}</h1>
-      <p className="lede">
-        {signUp
-          ? "Use your email address to upload Tyr replay files."
-          : "Sign in to upload Tyr replay files."}
-      </p>
-
-      <form className="form" onSubmit={handleSubmit}>
-        <label>
-          Email
-          <input
-            type="email"
-            autoComplete="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Password
-          <input
-            type="password"
-            autoComplete={signUp ? "new-password" : "current-password"}
-            minLength={6}
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            required
-          />
-        </label>
-        {!signUp && (
-          <p className="forgot">
-            <button
-              type="button"
-              className="text-btn"
-              onClick={() => openWebsitePath("/auth/reset-password")}
-            >
-              Forgot password?
-            </button>
+    <section className="pane pane-auth">
+      {email ? (
+        <>
+          <h1>Signed in</h1>
+          <p className="lede">{email}</p>
+          <p className="muted">
+            The folder on the right is unlocked. Sign out to use a different
+            account.
           </p>
-        )}
+          <button
+            className="cta ghost"
+            type="button"
+            onClick={() => supabase?.auth.signOut()}
+          >
+            Sign out
+          </button>
+        </>
+      ) : (
+        <>
+          <h1>{signUp ? "Create your account" : "Sign in"}</h1>
+          <p className="lede">
+            {signUp
+              ? "Use the same email as tyrstats to upload Tyr replay files."
+              : "Sign in with your tyrstats account to choose a folder."}
+          </p>
 
-        {error && <p className="error">{error}</p>}
-        {message && <p className="success">{message}</p>}
+          <form className="form" onSubmit={handleSubmit}>
+            <label>
+              Email
+              <input
+                type="email"
+                autoComplete="email"
+                value={emailValue}
+                onChange={(event) => setEmailValue(event.target.value)}
+                required
+              />
+            </label>
+            <label>
+              Password
+              <input
+                type="password"
+                autoComplete={signUp ? "new-password" : "current-password"}
+                minLength={6}
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                required
+              />
+            </label>
+            {!signUp && (
+              <p className="forgot">
+                <button
+                  type="button"
+                  className="text-btn"
+                  onClick={() => openWebsitePath("/auth/reset-password")}
+                >
+                  Forgot password?
+                </button>
+              </p>
+            )}
 
-        <button className="cta" type="submit" disabled={submitting}>
-          {submitting ? "Please wait…" : signUp ? "Create account" : "Sign in"}
-        </button>
-      </form>
+            {error && <p className="error">{error}</p>}
+            {message && <p className="success">{message}</p>}
 
-      <button
-        className="text-btn toggle"
-        type="button"
-        onClick={() => {
-          setMode(signUp ? "sign-in" : "sign-up");
-          setError("");
-          setMessage("");
-        }}
-      >
-        {signUp
-          ? "Already have an account? Sign in"
-          : "Need an account? Sign up"}
-      </button>
+            <button className="cta" type="submit" disabled={submitting}>
+              {submitting
+                ? "Please wait…"
+                : signUp
+                  ? "Create account"
+                  : "Sign in"}
+            </button>
+          </form>
+
+          <button
+            className="text-btn toggle"
+            type="button"
+            onClick={() => {
+              setMode(signUp ? "sign-in" : "sign-up");
+              setError("");
+              setMessage("");
+            }}
+          >
+            {signUp
+              ? "Already have an account? Sign in"
+              : "Need an account? Sign up"}
+          </button>
+        </>
+      )}
     </section>
   );
 }

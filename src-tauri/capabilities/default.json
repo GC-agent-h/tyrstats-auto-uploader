@@ -6,6 +6,7 @@
   "permissions": [
     "core:default",
     "opener:default",
+    "dialog:default",
     "fs:allow-read-dir",
     "fs:allow-read-file",
     "fs:allow-read-text-file",
@@ -19,6 +20,8 @@
       "allow": [
         { "path": "$LOCALDATA/Tyr/Saved/Demos" },
         { "path": "$LOCALDATA/Tyr/Saved/Demos/**" },
+        { "path": "$HOME/**" },
+        { "path": "$LOCALDATA/**" },
         { "path": "$APPLOCALDATA" },
         { "path": "$APPLOCALDATA/**" }
       ]

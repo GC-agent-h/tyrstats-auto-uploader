@@ -16,7 +16,6 @@ import {
   saveLedger,
   type Ledger,
 } from "./ledger";
-import { demoFolderPath } from "./paths";
 import { publishReplay } from "./publish";
 
 export type SyncEvent = {
@@ -36,11 +35,16 @@ export class ReplaySync {
   private timer: ReturnType<typeof setInterval> | null = null;
   private draining = false;
   private includeExisting = false;
+  private folder = "";
 
   constructor(
     private readonly getToken: TokenFn,
     private readonly emit: EventFn,
   ) {}
+
+  setFolder(path: string) {
+    this.folder = path;
+  }
 
   setIncludeExisting(value: boolean) {
     this.includeExisting = value;
@@ -89,7 +93,11 @@ export class ReplaySync {
   }
 
   private async drainUnsafe() {
-    const folder = await demoFolderPath();
+    const folder = this.folder;
+    if (!folder) {
+      this.log("error", "No folder selected.");
+      return;
+    }
     if (!(await exists(folder))) {
       this.log("error", `Replay folder not found: ${folder}`);
       return;
