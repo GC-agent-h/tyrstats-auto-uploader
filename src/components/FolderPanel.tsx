@@ -47,12 +47,6 @@ export function FolderPanel({ signedIn }: Props) {
     };
   }, []);
 
-  useEffect(() => {
-    if (signedIn) return;
-    syncRef.current?.stopWatching();
-    setWatching(false);
-  }, [signedIn]);
-
   function toggleWatch() {
     const sync = syncRef.current;
     if (!sync) return;
@@ -67,19 +61,18 @@ export function FolderPanel({ signedIn }: Props) {
     setWatching(true);
   }
 
-  const locked = !signedIn;
   const folderReady = isDesktopShell() && folder !== DEFAULT_FOLDER_HINT;
 
   return (
-    <section className={`pane pane-folder${locked ? " is-locked" : ""}`}>
-      {locked && (
+    <section className="pane pane-folder">
+      {!signedIn && (
         <p className="lock-note">
-          Sign in on the left to start watching. Uploads use your tyrstats
-          account.
+          Not signed in. Uploads still work and count as Others on the
+          leaderboard.
         </p>
       )}
 
-      <div className="pane-body" inert={locked}>
+      <div className="pane-body">
         <h1>Replay folder</h1>
         <p className="lede">
           Tyr writes finished matches to{" "}
@@ -101,7 +94,7 @@ export function FolderPanel({ signedIn }: Props) {
           <input
             type="checkbox"
             checked={includeExisting}
-            disabled={locked}
+            disabled={!folderReady}
             onChange={(event) => {
               const value = event.target.checked;
               setIncludeExisting(value);
@@ -119,7 +112,7 @@ export function FolderPanel({ signedIn }: Props) {
           <button
             className={watching ? "cta auto-on" : "cta secondary"}
             type="button"
-            disabled={locked || !folderReady}
+            disabled={!folderReady}
             onClick={toggleWatch}
           >
             {watching ? "Stop auto upload" : "Start auto upload"}

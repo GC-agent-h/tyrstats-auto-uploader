@@ -143,10 +143,6 @@ export class ReplaySync {
     }
 
     const token = await this.getToken();
-    if (!token) {
-      this.log("error", "Not signed in.");
-      return;
-    }
 
     const seen = rememberedDigests(ledger);
     const pending = files.filter((file) => {
@@ -167,7 +163,7 @@ export class ReplaySync {
     file: ReplayFile,
     ledger: Ledger,
     seen: Set<string>,
-    token: string,
+    token: string | null,
   ) {
     if (isOversize(file.size)) {
       remember(ledger, file.name, stamp(file, null, "too large"));

@@ -34,12 +34,16 @@ function describe(body: ApiBody | null, fallback: string) {
   return fallback;
 }
 
-async function postForm(path: string, token: string, file: File) {
+async function postForm(path: string, token: string | null, file: File) {
   const form = new FormData();
   form.append("file", file);
+  const headers: Record<string, string> = {};
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
   return apiFetch(path, {
     method: "POST",
-    headers: { Authorization: `Bearer ${token}` },
+    headers,
     body: form,
   });
 }
@@ -47,7 +51,7 @@ async function postForm(path: string, token: string, file: File) {
 export async function publishReplay(
   fileName: string,
   bytes: Uint8Array,
-  token: string,
+  token: string | null,
 ): Promise<PublishResult> {
   const file = new File([new Blob([bytes])], fileName, {
     type: "application/octet-stream",
