@@ -166,6 +166,33 @@ body {
   margin-top: 0;
 }
 
+.cta.steam {
+  margin-top: 1.25rem;
+  background: #171a21;
+  color: #fff;
+}
+
+.cta.steam:hover:not(:disabled) {
+  background: #2a475e;
+}
+
+.or-email {
+  margin: 1.25rem 0 0;
+  text-align: center;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.steam-wait {
+  margin-top: 1.25rem;
+}
+
+.steam-wait .cta.ghost {
+  color: var(--foreground);
+}
+
 .log {
   list-style: none;
   margin: 1.25rem 0 0;
