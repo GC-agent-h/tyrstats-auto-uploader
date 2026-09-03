@@ -189,6 +189,15 @@ body {
   margin-top: 1.25rem;
 }
 
+.steam-code {
+  margin: 0 0 0.75rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-align: center;
+}
+
 .steam-wait .cta.ghost {
   color: var(--foreground);
 }

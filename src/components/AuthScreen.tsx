@@ -15,6 +15,7 @@ export function AuthScreen({ email }: Props) {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [steamWaiting, setSteamWaiting] = useState(false);
+  const [steamUserCode, setSteamUserCode] = useState("");
   const steamAbort = useRef<AbortController | null>(null);
 
   const signUpMode = mode === "sign-up";
@@ -47,12 +48,14 @@ export function AuthScreen({ email }: Props) {
     const controller = new AbortController();
     steamAbort.current = controller;
     setSteamWaiting(true);
+    setSteamUserCode("");
     setError("");
     setMessage("");
 
-    const result = await signInWithSteam(controller.signal);
+    const result = await signInWithSteam(controller.signal, setSteamUserCode);
     if (steamAbort.current === controller) {
       setSteamWaiting(false);
+      setSteamUserCode("");
       steamAbort.current = null;
     }
     if (!result.ok && result.error !== "cancelled") {
@@ -64,6 +67,7 @@ export function AuthScreen({ email }: Props) {
     steamAbort.current?.abort();
     steamAbort.current = null;
     setSteamWaiting(false);
+    setSteamUserCode("");
   }
 
   return (
@@ -95,8 +99,13 @@ export function AuthScreen({ email }: Props) {
 
           {steamWaiting ? (
             <div className="steam-wait">
+              {steamUserCode ? (
+                <p className="steam-code" aria-label="Uploader code">
+                  {steamUserCode}
+                </p>
+              ) : null}
               <p className="muted tight">
-                Finish signing in with Steam in your browser, then return here.
+                Enter this code on the website after signing in with Steam.
               </p>
               <button
                 className="cta ghost"

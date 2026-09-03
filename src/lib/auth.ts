@@ -16,6 +16,7 @@ type TokenBody = {
   needs_confirmation?: boolean;
   pending?: boolean;
   login_id?: string;
+  user_code?: string;
   expires_in?: number;
 };
 
@@ -94,6 +95,7 @@ function sleep(ms: number, signal: AbortSignal) {
 
 export async function signInWithSteam(
   signal: AbortSignal,
+  onStarted?: (userCode: string) => void,
 ): Promise<AuthResult> {
   const codeVerifier = randomBase64Url(32);
   const codeChallenge = await sha256Base64Url(codeVerifier);
@@ -101,7 +103,7 @@ export async function signInWithSteam(
     method: "POST",
     body: JSON.stringify({ code_challenge: codeChallenge }),
   });
-  if (!started.ok || !started.body?.login_id) {
+  if (!started.ok || !started.body?.login_id || !started.body.user_code) {
     return {
       ok: false,
       error: started.body?.error ?? "Could not start Steam login.",
@@ -112,7 +114,8 @@ export async function signInWithSteam(
   const deadline =
     Date.now() + Math.max(30, started.body.expires_in ?? 600) * 1000;
 
-  await openWebsitePath(`/api/steam/login?desktop=${encodeURIComponent(loginId)}`);
+  onStarted?.(started.body.user_code);
+  await openWebsitePath("/api/steam/login?desktop=1");
 
   while (Date.now() < deadline) {
     if (signal.aborted) {
