@@ -32,7 +32,13 @@
         { "path": "$LOCALDATA/Tyr/Saved/Demos" },
         { "path": "$LOCALDATA/Tyr/Saved/Demos/**" },
         { "path": "$APPLOCALDATA" },
-        { "path": "$APPLOCALDATA/**" }
+        { "path": "$APPLOCALDATA/**" },
+
+        { "path": "$HOME/**/steamapps/compatdata/2445260/**" },
+        { "path": "/var/home/**/steamapps/compatdata/2445260/**" },
+        { "path": "/run/media/**/steamapps/compatdata/2445260/**" },
+        { "path": "/media/**/steamapps/compatdata/2445260/**" },
+        { "path": "/mnt/**/steamapps/compatdata/2445260/**" }
       ]
     },
     {
