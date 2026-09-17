@@ -18,7 +18,8 @@ function formatTime(at: number) {
 
 export function FolderPanel({ signedIn }: Props) {
   const syncRef = useRef<ReplaySync | null>(null);
-  const [folder, setFolder] = useState(DEFAULT_FOLDER_HINT);
+  const [folder, setFolder] = useState("");
+  const [lookupDone, setLookupDone] = useState(false);
   const [watching, setWatching] = useState(false);
   const [includeExisting, setIncludeExisting] = useState(false);
   const [events, setEvents] = useState<SyncEvent[]>([]);
@@ -37,6 +38,8 @@ export function FolderPanel({ signedIn }: Props) {
     syncRef.current = sync;
 
     void demoFolderPath().then((path) => {
+      setLookupDone(true);
+      if (!path) return;
       setFolder(path);
       sync.setFolder(path);
     });
@@ -61,7 +64,7 @@ export function FolderPanel({ signedIn }: Props) {
     setWatching(true);
   }
 
-  const folderReady = isDesktopShell() && folder !== DEFAULT_FOLDER_HINT;
+  const folderReady = isDesktopShell() && Boolean(folder);
 
   return (
     <section className="pane pane-folder">
@@ -75,13 +78,33 @@ export function FolderPanel({ signedIn }: Props) {
       <div className="pane-body">
         <h1>Replay folder</h1>
         <p className="lede">
-          Tyr writes finished matches to{" "}
-          <code>{DEFAULT_FOLDER_HINT}</code>. This app watches that folder only.
+          {folder ? (
+            <>
+              Tyr writes finished matches to <code>{folder}</code>. This app
+              watches that folder only.
+            </>
+          ) : lookupDone ? (
+            <>
+              Could not find Tyr&apos;s replay folder. On Linux the game runs
+              under Proton; install Tyr through Steam (app 2445260) and restart
+              this app.
+            </>
+          ) : (
+            <>
+              Looking for Tyr&apos;s replay folder ({DEFAULT_FOLDER_HINT} on
+              Windows, Proton prefix on Linux).
+            </>
+          )}
         </p>
 
         <label>
           Folder to watch
-          <input type="text" value={folder} readOnly />
+          <input
+            type="text"
+            value={folder}
+            placeholder={DEFAULT_FOLDER_HINT}
+            readOnly
+          />
         </label>
 
         <p className="muted tight">
