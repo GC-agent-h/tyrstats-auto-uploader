@@ -197,7 +197,7 @@ export class ReplaySync {
       return;
     }
 
-    const result = await publishReplay(file.name, bytes, token);
+    const result = await publishReplay(file.name, bytes, token, file.modifiedAt);
     if (!result.ok) {
       this.log("error", `${file.name}: ${result.message}`);
       if (!result.retry) {

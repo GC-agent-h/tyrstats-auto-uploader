@@ -34,9 +34,11 @@ function describe(body: ApiBody | null, fallback: string) {
   return fallback;
 }
 
-async function postForm(path: string, token: string | null, file: File) {
+async function postForm(path: string, token: string | null, file: File, modifiedAt: number) {
   const form = new FormData();
   form.append("file", file);
+  form.append("original_file_modified_at_ms", String(modifiedAt));
+  form.append("recorder_utc_offset_minutes", String(new Date(modifiedAt).getTimezoneOffset()));
   const headers: Record<string, string> = {};
   if (token) {
     headers.Authorization = `Bearer ${token}`;
@@ -52,15 +54,17 @@ export async function publishReplay(
   fileName: string,
   bytes: Uint8Array,
   token: string | null,
+  modifiedAt: number,
 ): Promise<PublishResult> {
   const file = new File([new Blob([bytes])], fileName, {
     type: "application/octet-stream",
+    lastModified: modifiedAt,
   });
   const url = PROCESS_REPLAY_PATH;
 
   let response: Response;
   try {
-    response = await postForm(url, token, file);
+    response = await postForm(url, token, file, modifiedAt);
   } catch (error) {
     return {
       ok: false,
