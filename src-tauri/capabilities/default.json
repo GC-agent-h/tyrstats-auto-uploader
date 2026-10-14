@@ -35,6 +35,7 @@
         { "path": "$APPLOCALDATA/**" },
 
         { "path": "$HOME/**/steamapps/compatdata/2445260/**" },
+        { "path": "$HOME/.local/**/steamapps/compatdata/2445260/**" },
         { "path": "/var/home/**/steamapps/compatdata/2445260/**" },
         { "path": "/run/media/**/steamapps/compatdata/2445260/**" },
         { "path": "/media/**/steamapps/compatdata/2445260/**" },
